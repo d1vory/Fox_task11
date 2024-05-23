@@ -28,21 +28,24 @@ public class IncomeTypeService
         await _db.SaveChangesAsync();
         return incomeType;
     }
-    // //
-    // // public async Task Create()
-    // // {
-    // // }
-    //
-    // public async Task Update()
-    // {
-    // }
-    //
-    // public async Task Delete(int id)
-    // {
-    //
-    // }
-    //
-    // public async Task ValidateName()
-    // {
-    // }
+
+    public async Task<IncomeType> Update(IncomeType incomeType)
+    {
+        _db.IncomeTypes.Update(incomeType);
+        await _db.SaveChangesAsync();
+        return incomeType;
+    }
+    
+    public async Task Delete(int id)
+    {
+        var instance = await _db.IncomeTypes.FindAsync(id);
+        if (instance == null)
+        {
+            return;
+        }
+
+        _db.IncomeTypes.Remove(instance);
+        await _db.SaveChangesAsync();
+    }
+
 }
