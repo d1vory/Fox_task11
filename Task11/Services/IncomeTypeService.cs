@@ -14,17 +14,20 @@ public class IncomeTypeService
     
     public async Task<List<IncomeType>> List()
     {
-        var kek = await _db.IncomeTypes.ToListAsync();
-        return kek;
+        return await _db.IncomeTypes.ToListAsync();
     }
     
-    // public async Task Retrieve(int id)
-    // {
-    // }
-    //
-    // // public Task Create()
-    // // {
-    // // }
+    public async Task<IncomeType?> Retrieve(int id)
+    {
+        return await _db.IncomeTypes.FindAsync(id);
+    }
+    
+    public async Task<IncomeType> Create(IncomeType incomeType)
+    {
+        await _db.IncomeTypes.AddAsync(incomeType);
+        await _db.SaveChangesAsync();
+        return incomeType;
+    }
     // //
     // // public async Task Create()
     // // {

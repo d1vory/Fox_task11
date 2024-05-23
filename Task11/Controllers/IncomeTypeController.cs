@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Task11.Data;
+using Newtonsoft.Json;
 using Task11.Models;
+using Task11.Serializers;
 using Task11.Services;
 
 namespace Task11.Controllers;
@@ -20,10 +22,27 @@ public class IncomeTypeController: ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<IncomeType>>> List()
     {
-        // var db = new ApplicationContext();
-        // var kek = db.IncomeTypes.ToList();
         return Ok(await _incomeTypeService.List());
     }
-    
-    
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<IncomeType>> Retrieve(int id)
+    {
+        var obj = await _incomeTypeService.Retrieve(id);
+        if (obj == null)
+        {
+            return NotFound();
+        }
+
+        var serializer = new IncomeTypeSerializer(obj);
+        var serialized = JsonConvert.SerializeObject(serializer);
+        return Ok(serialized);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<IncomeType>> Create(IncomeTypeSerializer incomeTypeSerializer)
+    {
+        var incomeType = await _incomeTypeService.Create(incomeTypeSerializer.BuildInstance());
+        return CreatedAtAction(nameof(Retrieve), new { id = incomeType.Id }, incomeType);
+    }
 }
