@@ -57,4 +57,11 @@ public class IncomeTypeController: ControllerBase
         await _incomeTypeService.Update(obj);
         return RedirectToAction(nameof(Retrieve), new { id = obj.Id });
     }
+    
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<IncomeType>> Delete(int id)
+    {
+        await _incomeTypeService.Delete(id);
+        return Ok("ok");
+    }
 }
