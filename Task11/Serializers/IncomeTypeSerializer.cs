@@ -41,13 +41,22 @@ public class IncomeTypeSerializer
             Id = Id, Name = Name, Description = Description, IsTaxable = IsTaxable, IncomeCategoryId = IncomeCategory
         };
     }
+    
+    public IncomeType UpdateInstance(IncomeType instance)
+    {
+        instance.Name = Name;
+        instance.Description = Description;
+        instance.IsTaxable = IsTaxable;
+        instance.IncomeCategoryId = IncomeCategory;
+        return instance;
+    }
 
     public void ValidateIncomeCategory(int value)
     {
         var db = new ApplicationContext();
         if (!db.IncomeCategories.Any(ic => ic.Id == value))
         {
-            throw new JsonSerializationException("cum");
+            throw new JsonSerializationException("This category does not exist");
         }
     }
 }

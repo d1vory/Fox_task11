@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Task11.Data;
 using Task11.Services;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BaseApplicationContext, ApplicationContext>();
 builder.Services.AddTransient<IncomeTypeService>();
+builder.Services.AddTransient<ExpenseTypeService>();
 
 var app = builder.Build();
 

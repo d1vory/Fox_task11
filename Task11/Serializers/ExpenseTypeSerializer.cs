@@ -33,6 +33,14 @@ public class ExpenseTypeSerializer
             Id = Id, Name = Name, ExpenseCategoryId = ExpenseCategory
         };
     }
+    
+    // public ExpenseType UpdateInstance()
+    // {
+    //     return new ExpenseType()
+    //     {
+    //         Id = Id, Name = Name, ExpenseCategoryId = ExpenseCategory
+    //     };
+    // }
 
     public void ValidateExpenseCategory(int value)
     {

@@ -35,8 +35,7 @@ public class IncomeTypeController: ControllerBase
         }
 
         var serializer = new IncomeTypeSerializer(obj);
-        var serialized = JsonConvert.SerializeObject(serializer);
-        return Ok(serialized);
+        return new JsonResult(serializer);
     }
 
     [HttpPost]
@@ -44,5 +43,18 @@ public class IncomeTypeController: ControllerBase
     {
         var incomeType = await _incomeTypeService.Create(incomeTypeSerializer.BuildInstance());
         return CreatedAtAction(nameof(Retrieve), new { id = incomeType.Id }, incomeType);
+    }
+    
+    [HttpPut("{id}")]
+    public async Task<ActionResult<IncomeType>> Retrieve(int id, IncomeTypeSerializer serializer)
+    {
+        var obj = await _incomeTypeService.Retrieve(id);
+        if (obj == null)
+        {
+            return NotFound();
+        }
+        obj = serializer.UpdateInstance(obj);
+        await _incomeTypeService.Update(obj);
+        return RedirectToAction(nameof(Retrieve), new { id = obj.Id });
     }
 }

@@ -1,12 +1,14 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Task11.Models;
+using Task11.Serializers;
 using Task11.Services;
 
 namespace Task11.Controllers;
 
-public class ExpenseTypeController
+[Route("api/expense_type")]
+[ApiController]
+public class ExpenseTypeController: ControllerBase
 {
     private readonly ExpenseTypeService _expenseTypeService;
     
@@ -42,4 +44,11 @@ public class ExpenseTypeController
         var expenseType = await _expenseTypeService.Create(expenseTypeSerializer.BuildInstance());
         return CreatedAtAction(nameof(Retrieve), new { id = expenseType.Id }, expenseType);
     }
+
+
+    // [HttpPut("{id}")]
+    // public async Task<ActionResult<ExpenseType>> Retrieve(int id, ExpenseTypeSerializer expenseTypeSerializer)
+    // {
+    //     
+    // }
 }
