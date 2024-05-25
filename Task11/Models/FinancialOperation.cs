@@ -4,6 +4,12 @@ namespace Task11.Models;
 
 public class FinancialOperation
 {
+    public enum OperationTypeChoices
+    {
+        Income = 1,
+        Expense = 2
+    }
+    
     public int Id { get; set; }
     
     [StringLength(250)]
@@ -18,11 +24,23 @@ public class FinancialOperation
     public decimal Amount { get; set; }
     public DateTime TimeStamp { get; set; }
 
+    public OperationTypeChoices Type
+    {
+        get
+        {
+            if (IncomeType != null || IncomeTypeId.HasValue)
+            {
+                return OperationTypeChoices.Income;
+            }
+            return OperationTypeChoices.Expense;
+        }
+    }
+
     public bool IsIncome => IncomeType != null || IncomeTypeId.HasValue;
     public bool IsExpense => ExpenseType != null || ExpenseTypeId.HasValue;
     
     
-    public FinancialOperation(decimal amount, string description,  DateTime timeStamp, IncomeType? incomeType=null, ExpenseType? expenseType=null)
+    public FinancialOperation(string description, decimal amount, DateTime timeStamp, IncomeType? incomeType=null, ExpenseType? expenseType=null)
     {
         if ((incomeType != null && expenseType != null) || (incomeType == null && expenseType == null))
         {
@@ -36,7 +54,7 @@ public class FinancialOperation
         TimeStamp = timeStamp;
     }
     
-    public FinancialOperation(decimal amount, string description,  DateTime timeStamp, int? incomeTypeId=null, int? expenseTypeId=null)
+    public FinancialOperation(string description, decimal amount,  DateTime timeStamp, int? incomeTypeId=null, int? expenseTypeId=null)
     {
         if ((incomeTypeId != null && expenseTypeId != null) || (incomeTypeId == null && expenseTypeId == null))
         {

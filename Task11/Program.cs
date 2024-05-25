@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BaseApplicationContext, ApplicationContext>();
 builder.Services.AddTransient<IncomeTypeService>();
 builder.Services.AddTransient<ExpenseTypeService>();
+builder.Services.AddTransient<FinancialOperationService>();
 
 var app = builder.Build();
 

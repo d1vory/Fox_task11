@@ -7,6 +7,12 @@ namespace Task11.Serializers;
 
 public class IncomeTypeSerializer
 {
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public bool IsTaxable { get; set; }
+    public int IncomeCategory { get; set; }
+    
     public IncomeTypeSerializer(IncomeType instance)
     {
         Id = instance.Id;
@@ -27,12 +33,6 @@ public class IncomeTypeSerializer
         IncomeCategory = incomeCategory;
         
     }
-
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public bool IsTaxable { get; set; }
-    public int IncomeCategory { get; set; }
 
     public IncomeType BuildInstance()
     {
