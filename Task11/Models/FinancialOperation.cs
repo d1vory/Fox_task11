@@ -60,10 +60,16 @@ public class FinancialOperation
         {
             throw new ArgumentException("Provide either incomeTypeId or expenseTypeId");
         }
+        if (incomeTypeId.HasValue)
+        {
+            IncomeTypeId = incomeTypeId.Value;
+        }
+        if (expenseTypeId.HasValue)
+        {
+            ExpenseTypeId = expenseTypeId.Value;
+        }
         
         Description = description;
-        IncomeTypeId = incomeTypeId.Value;
-        ExpenseTypeId = expenseTypeId.Value;
         Amount = amount;
         TimeStamp = timeStamp;
     }

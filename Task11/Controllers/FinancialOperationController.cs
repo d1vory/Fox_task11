@@ -6,7 +6,7 @@ using Task11.Services;
 namespace Task11.Controllers;
 
 
-[Microsoft.AspNetCore.Components.Route("api/operation")]
+[Route("api/operation")]
 [ApiController]
 public class FinancialOperationController: ControllerBase
 {
@@ -44,10 +44,10 @@ public class FinancialOperationController: ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<FinancialOperation>> Create(FinancialOperationSerializer incomeTypeSerializer)
+    public async Task<ActionResult<FinancialOperation>> Create(FinancialOperationSerializer serializer)
     {
-        var incomeType = await _service.Create(incomeTypeSerializer.BuildInstance());
-        return CreatedAtAction(nameof(Retrieve), new { id = incomeType.Id }, incomeType);
+        var obj = await _service.Create(serializer.BuildInstance());
+        return CreatedAtAction(nameof(Retrieve), new { id = obj.Id }, new FinancialOperationSerializer(obj));
     }
     
     [HttpPut("{id}")]

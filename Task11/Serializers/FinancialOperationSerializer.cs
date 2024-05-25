@@ -40,15 +40,15 @@ public class FinancialOperationSerializer
         if (incomeType.HasValue)
         {
             ValidateIncomeType(incomeType.Value);
+            IncomeType = incomeType.Value;
         }
         if (expenseType.HasValue)
         {
             ValidateExpenseType(expenseType.Value);
+            ExpenseType = expenseType.Value;
         }
         
         Description = description;
-        IncomeType = incomeType.Value;
-        ExpenseType = expenseType.Value;
         Amount = amount;
         TimeStamp = timeStamp;
     }
