@@ -15,11 +15,11 @@ public class ExpenseTypeSerializer
     }
     
     [JsonConstructor]
-    public ExpenseTypeSerializer(string name, string description, bool isTaxable, int incomeCategory, BaseApplicationContext db)
+    public ExpenseTypeSerializer(string name, int expenseCategory, BaseApplicationContext db)
     {
         Name = name;
-        ValidateExpenseCategory(incomeCategory);
-        ExpenseCategory = incomeCategory;
+        ValidateExpenseCategory(expenseCategory);
+        ExpenseCategory = expenseCategory;
     }
 
     public int Id { get; set; }

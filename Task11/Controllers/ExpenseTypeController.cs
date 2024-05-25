@@ -21,7 +21,13 @@ public class ExpenseTypeController: ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ExpenseType>>> List()
     {
-        return Ok(await _expenseTypeService.List());
+        var objects = await _expenseTypeService.List();
+        var serializedObjects = new ExpenseTypeSerializer[objects.Count];
+        for (int i = 0; i < objects.Count; i++)
+        {
+            serializedObjects[i] = new ExpenseTypeSerializer(objects[i]);
+        }
+        return Ok(serializedObjects);
     }
     
     [HttpGet("{id}")]
@@ -34,8 +40,7 @@ public class ExpenseTypeController: ControllerBase
         }
     
         var serializer = new ExpenseTypeSerializer(obj);
-        var serialized = JsonConvert.SerializeObject(serializer);
-        return Ok(serialized);
+        return new JsonResult(serializer);
     }
     
     [HttpPost]

@@ -22,7 +22,13 @@ public class IncomeTypeController: ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<IncomeType>>> List()
     {
-        return Ok(await _incomeTypeService.List());
+        var objects = await _incomeTypeService.List();
+        var serializedObjects = new IncomeTypeSerializer[objects.Count];
+        for (int i = 0; i < objects.Count; i++)
+        {
+            serializedObjects[i] = new IncomeTypeSerializer(objects[i]);
+        }
+        return Ok(serializedObjects);
     }
 
     [HttpGet("{id}")]
