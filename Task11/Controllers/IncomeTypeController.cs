@@ -46,7 +46,7 @@ public class IncomeTypeController: ControllerBase
     }
     
     [HttpPut("{id}")]
-    public async Task<ActionResult<IncomeType>> Retrieve(int id, IncomeTypeSerializer serializer)
+    public async Task<ActionResult<IncomeType>> Update(int id, IncomeTypeSerializer serializer)
     {
         var obj = await _incomeTypeService.Retrieve(id);
         if (obj == null)

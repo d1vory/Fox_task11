@@ -46,9 +46,23 @@ public class ExpenseTypeController: ControllerBase
     }
 
 
-    // [HttpPut("{id}")]
-    // public async Task<ActionResult<ExpenseType>> Retrieve(int id, ExpenseTypeSerializer expenseTypeSerializer)
-    // {
-    //     
-    // }
+    [HttpPut("{id}")]
+    public async Task<ActionResult<ExpenseType>> Update(int id, ExpenseTypeSerializer serializer)
+    {
+        var obj = await _expenseTypeService.Retrieve(id);
+        if (obj == null)
+        {
+            return NotFound();
+        }
+        obj = serializer.UpdateInstance(obj);
+        await _expenseTypeService.Update(obj);
+        return RedirectToAction(nameof(Retrieve), new { id = obj.Id });
+    }
+    
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<ExpenseType>> Delete(int id)
+    {
+        await _expenseTypeService.Delete(id);
+        return Ok("ok");
+    }
 }

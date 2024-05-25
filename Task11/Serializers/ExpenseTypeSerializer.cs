@@ -34,20 +34,19 @@ public class ExpenseTypeSerializer
         };
     }
     
-    // public ExpenseType UpdateInstance()
-    // {
-    //     return new ExpenseType()
-    //     {
-    //         Id = Id, Name = Name, ExpenseCategoryId = ExpenseCategory
-    //     };
-    // }
+    public ExpenseType UpdateInstance(ExpenseType instance)
+    {
+        instance.Name = Name;
+        instance.ExpenseCategoryId = ExpenseCategory;
+        return instance;
+    }
 
     public void ValidateExpenseCategory(int value)
     {
         var db = new ApplicationContext();
         if (!db.ExpenseCategories.Any(ic => ic.Id == value))
         {
-            throw new JsonSerializationException("cum");
+            throw new JsonSerializationException("This category does not exist");
         }
     }
 }
