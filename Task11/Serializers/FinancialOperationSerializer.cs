@@ -80,7 +80,7 @@ public class FinancialOperationSerializer
         return serializedObjects;
     }
     
-    public void ValidateIncomeType(int value)
+    private void ValidateIncomeType(int value)
     {
         var db = new ApplicationContext();
         if (!db.IncomeTypes.Any(ic => ic.Id == value))
@@ -89,7 +89,7 @@ public class FinancialOperationSerializer
         }
     }
     
-    public void ValidateExpenseType(int value)
+    private void ValidateExpenseType(int value)
     {
         var db = new ApplicationContext();
         if (!db.ExpenseTypes.Any(ic => ic.Id == value))

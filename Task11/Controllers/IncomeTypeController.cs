@@ -63,7 +63,14 @@ public class IncomeTypeController: ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<IncomeType>> Delete(int id)
     {
-        await _incomeTypeService.Delete(id);
+        try
+        {
+            await _incomeTypeService.Delete(id);
+        }
+        catch (ApplicationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
         return Ok("ok");
     }
 }

@@ -38,6 +38,10 @@ public class ExpenseTypeService
     
     public async Task Delete(int id)
     {
+        if (await _db.FinancialOperations.AnyAsync(f=> f.ExpenseTypeId==id))
+        {
+            throw new ApplicationException("There are financial operations with this expense type");
+        }
         var instance = await _db.ExpenseTypes.FindAsync(id);
         if (instance == null)
         {

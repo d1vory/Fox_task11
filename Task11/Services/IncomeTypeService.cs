@@ -38,6 +38,11 @@ public class IncomeTypeService
     
     public async Task Delete(int id)
     {
+        if (await _db.FinancialOperations.AnyAsync(f=> f.IncomeTypeId==id))
+        {
+            throw new ApplicationException("There are financial operations with this income type");
+        }
+        
         var instance = await _db.IncomeTypes.FindAsync(id);
         if (instance == null)
         {

@@ -29,18 +29,18 @@ public class FinancialOperationService
         return await _db.FinancialOperations.FindAsync(id);
     }
     
-    public async Task<FinancialOperation> Create(FinancialOperation incomeType)
+    public async Task<FinancialOperation> Create(FinancialOperation instance)
     {
-        await _db.FinancialOperations.AddAsync(incomeType);
+        await _db.FinancialOperations.AddAsync(instance);
         await _db.SaveChangesAsync();
-        return incomeType;
+        return instance;
     }
 
-    public async Task<FinancialOperation> Update(FinancialOperation incomeType)
+    public async Task<FinancialOperation> Update(FinancialOperation instance)
     {
-        _db.FinancialOperations.Update(incomeType);
+        _db.FinancialOperations.Update(instance);
         await _db.SaveChangesAsync();
-        return incomeType;
+        return instance;
     }
     
     public async Task Delete(int id)

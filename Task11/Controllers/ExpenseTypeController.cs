@@ -63,7 +63,14 @@ public class ExpenseTypeController: ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<ExpenseType>> Delete(int id)
     {
-        await _expenseTypeService.Delete(id);
+        try
+        {
+            await _expenseTypeService.Delete(id);
+        }
+        catch (ApplicationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
         return Ok("ok");
     }
 }
