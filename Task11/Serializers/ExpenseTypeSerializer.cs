@@ -40,6 +40,17 @@ public class ExpenseTypeSerializer
         instance.ExpenseCategoryId = ExpenseCategory;
         return instance;
     }
+    
+    public static ExpenseTypeSerializer[] SerializeList(IList<ExpenseType> objects)
+    {
+        var serializedObjects = new ExpenseTypeSerializer[objects.Count];
+        for (int i = 0; i < objects.Count; i++)
+        {
+            serializedObjects[i] = new ExpenseTypeSerializer(objects[i]);
+        }
+
+        return serializedObjects;
+    }
 
     public void ValidateExpenseCategory(int value)
     {

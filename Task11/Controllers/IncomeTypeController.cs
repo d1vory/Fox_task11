@@ -23,11 +23,7 @@ public class IncomeTypeController: ControllerBase
     public async Task<ActionResult<IEnumerable<IncomeType>>> List()
     {
         var objects = await _incomeTypeService.List();
-        var serializedObjects = new IncomeTypeSerializer[objects.Count];
-        for (int i = 0; i < objects.Count; i++)
-        {
-            serializedObjects[i] = new IncomeTypeSerializer(objects[i]);
-        }
+        var serializedObjects = IncomeTypeSerializer.SerializeList(objects);
         return Ok(serializedObjects);
     }
 

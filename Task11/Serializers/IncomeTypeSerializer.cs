@@ -50,6 +50,17 @@ public class IncomeTypeSerializer
         instance.IncomeCategoryId = IncomeCategory;
         return instance;
     }
+    
+    public static IncomeTypeSerializer[] SerializeList(IList<IncomeType> objects)
+    {
+        var serializedObjects = new IncomeTypeSerializer[objects.Count];
+        for (int i = 0; i < objects.Count; i++)
+        {
+            serializedObjects[i] = new IncomeTypeSerializer(objects[i]);
+        }
+
+        return serializedObjects;
+    }
 
     public void ValidateIncomeCategory(int value)
     {

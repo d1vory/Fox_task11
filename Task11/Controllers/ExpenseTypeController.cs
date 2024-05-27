@@ -22,11 +22,7 @@ public class ExpenseTypeController: ControllerBase
     public async Task<ActionResult<IEnumerable<ExpenseType>>> List()
     {
         var objects = await _expenseTypeService.List();
-        var serializedObjects = new ExpenseTypeSerializer[objects.Count];
-        for (int i = 0; i < objects.Count; i++)
-        {
-            serializedObjects[i] = new ExpenseTypeSerializer(objects[i]);
-        }
+        var serializedObjects = ExpenseTypeSerializer.SerializeList(objects);
         return Ok(serializedObjects);
     }
     
