@@ -75,9 +75,6 @@ public class IncomeTypeServiceTest
         await db.FinancialOperations.AddAsync(finOp);
         await db.SaveChangesAsync();
         
-        
-        
-        
         var incomeTypeWithOps = await db.IncomeTypes.FindAsync(1);
         Assert.IsNotNull(incomeTypeWithOps);
         await Assert.ThrowsExceptionAsync<ApplicationException>(async () => await _incomeTypeService.Delete(incomeTypeWithOps.Id));
