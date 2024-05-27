@@ -22,11 +22,7 @@ public class FinancialOperationController: ControllerBase
     public async Task<ActionResult<IEnumerable<FinancialOperation>>> List()
     {
         var objects = await _service.List();
-        var serializedObjects = new FinancialOperationSerializer[objects.Count];
-        for (int i = 0; i < objects.Count; i++)
-        {
-            serializedObjects[i] = new FinancialOperationSerializer(objects[i]);
-        }
+        var serializedObjects = FinancialOperationSerializer.SerializeList(objects);
         return Ok(serializedObjects);
     }
 
@@ -68,6 +64,32 @@ public class FinancialOperationController: ControllerBase
     {
         await _service.Delete(id);
         return Ok("ok");
+    }
+    
+    [HttpGet("dailyReport")]
+    public async Task<ActionResult<IEnumerable<FinancialOperation>>> GetDailyReport(DateOnly date)
+    {
+        var report = await _service.GetPeriodicReport(date.ToDateTime(TimeOnly.MinValue));
+        var kek = new
+        {
+            report.TotalIncome,
+            report.TotalExpense,
+            Operations = FinancialOperationSerializer.SerializeList(report.Operations)
+        };
+        return Ok(kek);
+    }
+    
+    [HttpGet("periodicReport")]
+    public async Task<ActionResult<IEnumerable<FinancialOperation>>> GetPeriodicReport(DateOnly startDate, DateOnly endDate)
+    {
+        var report = await _service.GetPeriodicReport(startDate.ToDateTime(TimeOnly.MinValue), endDate.ToDateTime(TimeOnly.MinValue));
+        var kek = new
+        {
+            report.TotalIncome,
+            report.TotalExpense,
+            Operations = FinancialOperationSerializer.SerializeList(report.Operations)
+        };
+        return Ok(kek);
     }
     
 }

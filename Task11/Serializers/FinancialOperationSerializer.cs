@@ -69,6 +69,17 @@ public class FinancialOperationSerializer
         return instance;
     }
     
+    public static FinancialOperationSerializer[] SerializeList(IList<FinancialOperation> objects)
+    {
+        var serializedObjects = new FinancialOperationSerializer[objects.Count];
+        for (int i = 0; i < objects.Count; i++)
+        {
+            serializedObjects[i] = new FinancialOperationSerializer(objects[i]);
+        }
+
+        return serializedObjects;
+    }
+    
     public void ValidateIncomeType(int value)
     {
         var db = new ApplicationContext();
