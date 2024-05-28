@@ -66,11 +66,11 @@ public class FinancialOperationService
         {
             operationsOnDate = _db.FinancialOperations.Where(f => f.TimeStamp.Date >= startDate.Date && f.TimeStamp.Date <= endDate.Value.Date);
         }
-        var totalIncome = await operationsOnDate.Where(f=> f.IncomeTypeId != null).SumAsync(f => f.Amount);
-        var totalExpense = await operationsOnDate.Where(f=> f.ExpenseTypeId != null).SumAsync(f => f.Amount);
-        return new Report()
-        {
-            TotalIncome = totalIncome, TotalExpense = totalExpense, Operations = await operationsOnDate.ToListAsync()
-        };
+        // var totalIncome = await operationsOnDate.Where(f=> f.IncomeTypeId != null).SumAsync(f => f.Amount);
+        // var totalExpense = await operationsOnDate.Where(f=> f.ExpenseTypeId != null).SumAsync(f => f.Amount);
+        return new Report();
+        // {
+        //     TotalIncome = totalIncome, TotalExpense = totalExpense, Operations = await operationsOnDate.ToListAsync()
+        // };
     }
 }

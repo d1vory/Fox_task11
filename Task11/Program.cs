@@ -10,8 +10,7 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BaseApplicationContext, ApplicationContext>();
-builder.Services.AddTransient<IncomeTypeService>();
-builder.Services.AddTransient<ExpenseTypeService>();
+builder.Services.AddTransient<OperationTypeService>();
 builder.Services.AddTransient<FinancialOperationService>();
 
 var app = builder.Build();
