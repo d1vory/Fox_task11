@@ -8,6 +8,8 @@ public class DomainToResponseMappingProfile: Profile
     public DomainToResponseMappingProfile()
     {
         CreateMap<Models.OperationType, OperationTypeDto>();
+        CreateMap<CreateOperationTypeDto, Models.OperationType>();
+        CreateMap<UpdateOperationTypeDto, Models.OperationType>();
     }
     
 }

@@ -18,46 +18,48 @@ public class OperationTypeService
     
     public async Task<List<OperationTypeDto>> List()
     {
-        var dbObjects = await _db.OperationTypes.ToListAsync();
-        var kek = _db.OperationTypes.ProjectToList<OperationTypeDto>(_mapper.ConfigurationProvider);
-        //var kek = _mapper.Map<OperationTypeDto>(dbObjects);
-        return kek;
+        return await _db.OperationTypes.ProjectToListAsync<OperationTypeDto>(_mapper.ConfigurationProvider);
     }
     
-    public async Task<OperationType?> Retrieve(int id)
+    public async Task<OperationTypeDto?> Retrieve(int id)
     {
-        return await _db.OperationTypes.FindAsync(id);
+        var obj = await _db.OperationTypes.FindAsync(id);
+        return _mapper.Map<OperationTypeDto>(obj);
     }
     
-    public async Task<OperationType> Create(OperationType operationType)
+    public async Task<OperationTypeDto> Create(CreateOperationTypeDto operationType)
     {
-        await _db.OperationTypes.AddAsync(operationType);
+        var instance = _mapper.Map<OperationType>(operationType);
+        await _db.OperationTypes.AddAsync(instance);
         await _db.SaveChangesAsync();
-        return operationType;
+        return _mapper.Map<OperationTypeDto>(instance);
     }
 
-    public async Task<OperationType> Update(OperationType operationType)
+    public async Task<OperationTypeDto> Update(int instanceId, UpdateOperationTypeDto operationType)
     {
-        _db.OperationTypes.Update(operationType);
+        var instance = _mapper.Map<OperationType>(operationType);
+        instance.Id = instanceId;
+        _db.Entry(instance).State = EntityState.Modified;
         await _db.SaveChangesAsync();
-        return operationType;
+        return _mapper.Map<OperationTypeDto>(instance);
     }
-    
-    public async Task Delete(int id)
+
+    public async Task<bool> Delete(int id)
     {
-        // if (await _db.FinancialOperations.AnyAsync(f=> f.OperationTypeId==id))
-        // {
-        //     throw new ApplicationException("There are financial operations with this income type");
-        // }
-        
+        if (await _db.FinancialOperations.AnyAsync(f => f.OperationTypeId == id))
+        {
+            throw new ApplicationException("There are financial operations with this type");
+        }
+
         var instance = await _db.OperationTypes.FindAsync(id);
         if (instance == null)
         {
-            return;
+            return false;
         }
 
         _db.OperationTypes.Remove(instance);
         await _db.SaveChangesAsync();
+        return true;
     }
 
 }
