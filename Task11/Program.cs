@@ -1,4 +1,5 @@
 using Task11.Data;
+using Task11.DTO;
 using Task11.Services;
 
 
@@ -9,9 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<BaseApplicationContext, ApplicationContext>();
 builder.Services.AddTransient<OperationTypeService>();
 builder.Services.AddTransient<FinancialOperationService>();
+
 
 var app = builder.Build();
 

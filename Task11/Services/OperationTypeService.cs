@@ -1,4 +1,6 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Task11.DTO.OperationType;
 using Task11.Models;
 
 namespace Task11.Services;
@@ -6,15 +8,20 @@ namespace Task11.Services;
 public class OperationTypeService
 {
     private readonly BaseApplicationContext _db;
-
-    public OperationTypeService(BaseApplicationContext db)
+    private readonly IMapper _mapper;
+    
+    public OperationTypeService(BaseApplicationContext db, IMapper mapper)
     {
         _db = db;
+        _mapper = mapper;
     }
     
-    public async Task<List<OperationType>> List()
+    public async Task<List<OperationTypeDto>> List()
     {
-        return await _db.OperationTypes.ToListAsync();
+        var dbObjects = await _db.OperationTypes.ToListAsync();
+        var kek = _db.OperationTypes.ProjectToList<OperationTypeDto>(_mapper.ConfigurationProvider);
+        //var kek = _mapper.Map<OperationTypeDto>(dbObjects);
+        return kek;
     }
     
     public async Task<OperationType?> Retrieve(int id)

@@ -10,6 +10,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="13.0.1" />
+        <PackageReference Include="AutoMapper.EF6" Version="3.0.0" />
         <PackageReference Include="JetBrains.Annotations" Version="2024.2.0-eap1" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
         <PackageReference Include="MSTest.TestAdapter" Version="3.0.4"/>
