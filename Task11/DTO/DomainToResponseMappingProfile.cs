@@ -1,4 +1,5 @@
 using AutoMapper;
+using Task11.DTO.FinancialOperation;
 using Task11.DTO.OperationType;
 
 namespace Task11.DTO;
@@ -10,6 +11,9 @@ public class DomainToResponseMappingProfile: Profile
         CreateMap<Models.OperationType, OperationTypeDto>();
         CreateMap<CreateOperationTypeDto, Models.OperationType>();
         CreateMap<UpdateOperationTypeDto, Models.OperationType>();
+        
+        CreateMap<Models.FinancialOperation, FinancialOperationDto>();
+        CreateMap<CreateFinancialOperationDto, Models.FinancialOperation>();
     }
     
 }

@@ -1,4 +1,6 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Task11.DTO.FinancialOperation;
 using Task11.Models;
 
 namespace Task11.Services;
@@ -6,7 +8,8 @@ namespace Task11.Services;
 public class FinancialOperationService
 {
     private readonly BaseApplicationContext _db;
-
+    private readonly IMapper _mapper;
+    
     public record Report
     {
         public decimal TotalIncome { get; set; }
@@ -14,26 +17,36 @@ public class FinancialOperationService
         public List<FinancialOperation> Operations { get; set; }
     }
 
-    public FinancialOperationService(BaseApplicationContext db)
+    public FinancialOperationService(BaseApplicationContext db, IMapper mapper)
     {
         _db = db;
+        _mapper = mapper;
     }
     
-    public async Task<List<FinancialOperation>> List()
+    public async Task<List<FinancialOperationDto>> List()
     {
-        return await _db.FinancialOperations.ToListAsync();
+        var objects = await _db.FinancialOperations
+            .Include(f => f.OperationType)
+            .ToListAsync();
+        return objects.Select(obj => _mapper.Map<FinancialOperationDto>(obj)).ToList();
     }
     
-    public async Task<FinancialOperation?> Retrieve(int id)
+    public async Task<FinancialOperationDto?> Retrieve(int id)
     {
-        return await _db.FinancialOperations.FindAsync(id);
+        var obj = await _db.FinancialOperations
+            .Include(f => f.OperationType)
+            .FirstOrDefaultAsync(f => f.Id == id);
+        return _mapper.Map<FinancialOperationDto>(obj);
     }
     
-    public async Task<FinancialOperation> Create(FinancialOperation instance)
+    public async Task<FinancialOperationDto> Create(CreateFinancialOperationDto operationDto)
     {
+        await ValidateOperationType(operationDto.OperationTypeId);
+        var instance = _mapper.Map<FinancialOperation>(operationDto);
         await _db.FinancialOperations.AddAsync(instance);
         await _db.SaveChangesAsync();
-        return instance;
+        await _db.Entry(instance).Reference(f=>f.OperationType).LoadAsync();
+        return _mapper.Map<FinancialOperationDto>(instance);
     }
 
     public async Task<FinancialOperation> Update(FinancialOperation instance)
@@ -72,5 +85,14 @@ public class FinancialOperationService
         // {
         //     TotalIncome = totalIncome, TotalExpense = totalExpense, Operations = await operationsOnDate.ToListAsync()
         // };
+    }
+    
+    
+    public async Task ValidateOperationType(int value)
+    {
+        if (! await _db.OperationTypes.AnyAsync(ot => ot.Id == value))
+        {
+            throw new ApplicationException("This income type does not exist");
+        }
     }
 }

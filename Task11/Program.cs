@@ -11,7 +11,7 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddDbContext<BaseApplicationContext, ApplicationContext>();
+builder.Services.AddDbContext<BaseApplicationContext, ApplicationContext>(ServiceLifetime.Transient);
 builder.Services.AddTransient<OperationTypeService>();
 builder.Services.AddTransient<FinancialOperationService>();
 

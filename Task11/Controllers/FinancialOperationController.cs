@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Task11.DTO.FinancialOperation;
 using Task11.Models;
 using Task11.Services;
 
@@ -17,34 +18,32 @@ public class FinancialOperationController: ControllerBase
     }
     
     
-    // [HttpGet]
-    // public async Task<ActionResult<IEnumerable<FinancialOperation>>> List()
-    // {
-    //     var objects = await _service.List();
-    //     var serializedObjects = FinancialOperationSerializer.SerializeList(objects);
-    //     return Ok(serializedObjects);
-    // }
-    //
-    // [HttpGet("{id}")]
-    // public async Task<ActionResult<FinancialOperation>> Retrieve(int id)
-    // {
-    //     var obj = await _service.Retrieve(id);
-    //     if (obj == null)
-    //     {
-    //         return NotFound();
-    //     }
-    //
-    //     var serializer = new FinancialOperationSerializer(obj);
-    //     return new JsonResult(serializer);
-    // }
-    //
-    // [HttpPost]
-    // public async Task<ActionResult<FinancialOperation>> Create(FinancialOperationSerializer serializer)
-    // {
-    //     var obj = await _service.Create(serializer.BuildInstance());
-    //     return CreatedAtAction(nameof(Retrieve), new { id = obj.Id }, new FinancialOperationSerializer(obj));
-    // }
-    //
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<FinancialOperation>>> List()
+    {
+        var objects = await _service.List();
+        return Ok(objects);
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<ActionResult<FinancialOperationDto>> Retrieve([FromRoute] int id)
+    {
+        var obj = await _service.Retrieve(id);
+        if (obj == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(obj);
+    }
+    
+    [HttpPost]
+    public async Task<ActionResult<FinancialOperationDto>> Create([FromBody] CreateFinancialOperationDto operationDto)
+    {
+        var obj = await _service.Create(operationDto);
+        return Ok(obj);
+    }
+    
     // [HttpPut("{id}")]
     // public async Task<ActionResult<FinancialOperation>> Update(int id, FinancialOperationSerializer serializer)
     // {

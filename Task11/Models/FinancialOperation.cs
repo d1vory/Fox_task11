@@ -9,37 +9,24 @@ public class FinancialOperation
     [StringLength(250)]
     public string Description { get; set; } = "";
     
-    public OperationType? OperationType { get; set; }
+    public OperationType? OperationType { get; set; } //TODO make required
     public int? OperationTypeId { get; set; }
     
     public decimal Amount { get; set; }
     public DateTime TimeStamp { get; set; } //TODO rename
     
     
-    // public FinancialOperation(string description, decimal amount, DateTime timeStamp, IncomeType? incomeType=null, ExpenseType? expenseType=null)
+    // public FinancialOperation(string description, decimal amount, DateTime timeStamp, OperationType operationType)
     // {
     //     Description = description;
-    //     IncomeType = incomeType;
-    //     ExpenseType = expenseType;
+    //     OperationType = operationType;
     //     Amount = amount;
     //     TimeStamp = timeStamp;
     // }
     //
-    // public FinancialOperation(string description, decimal amount,  DateTime timeStamp, int? incomeTypeId=null, int? expenseTypeId=null)
+    // public FinancialOperation(string description, decimal amount,  DateTime timeStamp, int operationTypeId)
     // {
-    //     if ((incomeTypeId != null && expenseTypeId != null) || (incomeTypeId == null && expenseTypeId == null))
-    //     {
-    //         throw new ArgumentException("Provide either incomeTypeId or expenseTypeId");
-    //     }
-    //     if (incomeTypeId.HasValue)
-    //     {
-    //         IncomeTypeId = incomeTypeId.Value;
-    //     }
-    //     if (expenseTypeId.HasValue)
-    //     {
-    //         ExpenseTypeId = expenseTypeId.Value;
-    //     }
-    //     
+    //     OperationTypeId = operationTypeId;
     //     Description = description;
     //     Amount = amount;
     //     TimeStamp = timeStamp;
