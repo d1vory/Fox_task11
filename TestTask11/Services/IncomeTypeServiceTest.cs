@@ -1,42 +1,48 @@
+using AutoMapper;
 using JetBrains.Annotations;
 using Task11.Data;
+using Task11.DTO;
+using Task11.DTO.OperationType;
 using Task11.Models;
 using Task11.Services;
 
 namespace TestTask11.Services;
 
 [TestClass]
-[TestSubject(typeof(IncomeTypeService))]
-public class IncomeTypeServiceTest
+[TestSubject(typeof(OperationTypeService))]
+public class OperationTypeServiceTest
 {
 
     public InMemoryAppContext db;
-    private IncomeTypeService _incomeTypeService;
-
+    private OperationTypeService _operationTypeService;
+    
     [TestInitialize]
     public void TestInitialize()
     {
         db = new InMemoryAppContext();
         db.Database.EnsureDeleted();
         db.Database.EnsureCreated();
+        var mappingProfile = new DomainToResponseMappingProfile();
+        var config = new MapperConfiguration(cfg => cfg.AddProfile(mappingProfile));
 
-        _incomeTypeService = new IncomeTypeService(db);
+        var mapper = config.CreateMapper();
+        _operationTypeService = new OperationTypeService(db, mapper);
     }
 
     [TestMethod]
     public async Task TestList()
     {
-        var items = await _incomeTypeService.List();
-        Assert.AreEqual(ModelBuilderExtensions.DefaultIncomeTypes.Length, items.Count);
+        var items = await _operationTypeService.List();
+        Assert.AreEqual(ModelBuilderExtensions.DefaultOperationTypes.Length, items.Count);
     }
 
     [TestMethod]
     public async Task TestRetrieve()
     {
-        var item = await _incomeTypeService.Retrieve(1);
+        var item = await _operationTypeService.Retrieve(1);
         Assert.IsNotNull(item);
         
-        var item2 = await _incomeTypeService.Retrieve(100);
+        var item2 = await _operationTypeService.Retrieve(100);
         Assert.IsNull(item2);
     }
 
@@ -44,26 +50,29 @@ public class IncomeTypeServiceTest
     [TestMethod]
     public async Task TestCreate()
     {
-        var item = new IncomeType() { Name = "test", IncomeCategoryId = 1, IsTaxable = false };
-        item = await _incomeTypeService.Create(item);
-        Assert.IsNotNull(item.Id);
+        var item = new CreateOperationTypeDto() { Name = "test", Description = "my descriptionasa", IsTaxable = false, IsIncome = true};
+        var createdItem = await _operationTypeService.Create(item);
+        Assert.IsNotNull(createdItem.Id);
         
-        var itemInDb = await db.IncomeTypes.FindAsync(item.Id);;
+        var itemInDb = await db.OperationTypes.FindAsync(createdItem.Id);;
         Assert.IsNotNull(itemInDb);
     }
 
     [TestMethod]
     public async Task TestUpdate()
     {
-        var item = await db.IncomeTypes.FindAsync(1);
+        var item = await db.OperationTypes.FindAsync(1);
         Assert.IsNotNull(item);
 
         var changedName = "my new changed name";
-        item.Name = changedName;
 
-        await _incomeTypeService.Update(item);
+        var dto = new UpdateOperationTypeDto()
+        {
+            Name = changedName, Description = item.Description, IsIncome = item.IsIncome, IsTaxable = item.IsTaxable
+        };
+        await _operationTypeService.Update(item.Id, dto);
         
-        var item2 = await db.IncomeTypes.FindAsync(1);
+        var item2 = await db.OperationTypes.FindAsync(1);
         Assert.IsNotNull(item2);
         Assert.AreEqual(changedName, item2.Name);
     }
@@ -71,17 +80,31 @@ public class IncomeTypeServiceTest
     [TestMethod]
     public async Task TestDelete()
     {
-        var finOp = new FinancialOperation("blal", 100.0M, DateTime.Now, 1);
+        var finOp = new FinancialOperation(){Description = "testset", Amount = 100M, OperationTypeId = 1, CreatedAt = DateTime.Now};
         await db.FinancialOperations.AddAsync(finOp);
         await db.SaveChangesAsync();
         
-        var incomeTypeWithOps = await db.IncomeTypes.FindAsync(1);
-        Assert.IsNotNull(incomeTypeWithOps);
-        await Assert.ThrowsExceptionAsync<ApplicationException>(async () => await _incomeTypeService.Delete(incomeTypeWithOps.Id));
+        var operationTypeWithOps = await db.OperationTypes.FindAsync(1);
+        Assert.IsNotNull(operationTypeWithOps);
+        await Assert.ThrowsExceptionAsync<ApplicationException>(async () => await _operationTypeService.Delete(operationTypeWithOps.Id));
         
-        await _incomeTypeService.Delete(3);
-        var item2 = await db.IncomeTypes.FindAsync(3);
+        await _operationTypeService.Delete(3);
+        var item2 = await db.OperationTypes.FindAsync(3);
         Assert.IsNull(item2);
+    }
+    
+    [TestMethod]
+    public async Task TestValidateName()
+    {
+        var item = await db.OperationTypes.FindAsync(2);
+        Assert.IsNotNull(item);
+
+        await _operationTypeService.ValidateName(item.Name, item.Id);
+
+        await Assert.ThrowsExceptionAsync<ApplicationException>(async () => await _operationTypeService.ValidateName(item.Name));
+        await Assert.ThrowsExceptionAsync<ApplicationException>(async () => await _operationTypeService.ValidateName(null));
+        await Assert.ThrowsExceptionAsync<ApplicationException>(async () => await _operationTypeService.ValidateName(""));
+
     }
     
 }

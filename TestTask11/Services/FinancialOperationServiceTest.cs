@@ -1,5 +1,8 @@
+using AutoMapper;
 using JetBrains.Annotations;
 using Task11.Data;
+using Task11.DTO;
+using Task11.DTO.FinancialOperation;
 using Task11.Models;
 using Task11.Services;
 
@@ -11,38 +14,47 @@ public class FinancialOperationServiceTest
 
     public InMemoryAppContext db;
     private FinancialOperationService _financialOperationService;
-
+    
     public static FinancialOperation[] DefaultFinancialOperations =
     [
-        new FinancialOperation("a", 100M, new DateTime(2024, 4, 19), 1, null),
-        new FinancialOperation("b", 100M, new DateTime(2024, 4, 20), 1, null),
-        new FinancialOperation("c", 100M, new DateTime(2024, 4, 21), 1, null),
-        new FinancialOperation("d", 100M, new DateTime(2024, 4, 19), null, 1),
-        new FinancialOperation("e", 100M, new DateTime(2024, 4, 20), null, 1),
-        new FinancialOperation("f", 100M, new DateTime(2024, 4, 21), null, 1),
+        new FinancialOperation(){Description = "a", Amount = 100M, CreatedAt = new DateTime(2024, 4, 19), OperationTypeId = 1},
+        new FinancialOperation(){Description = "b", Amount = 100M, CreatedAt = new DateTime(2024, 4, 20), OperationTypeId = 1},
+        new FinancialOperation(){Description = "c", Amount = 100M, CreatedAt = new DateTime(2024, 4, 21), OperationTypeId = 1},
+        
+        new FinancialOperation(){Description = "d", Amount = 100M, CreatedAt = new DateTime(2024, 4, 19), OperationTypeId = 10},
+        new FinancialOperation(){Description = "e", Amount = 100M, CreatedAt = new DateTime(2024, 4, 20), OperationTypeId = 10},
+        new FinancialOperation(){Description = "f", Amount = 100M, CreatedAt = new DateTime(2024, 4, 21), OperationTypeId = 10}
     ];
 
-    [TestInitialize]
-    public async Task TestInitialize()
+    [ClassInitialize]
+    public static void ClassInit(TestContext testContext)
     {
-        Console.WriteLine("============================================================================");
-        db = new InMemoryAppContext();
-        await db.Database.EnsureDeletedAsync();
-        await db.Database.EnsureCreatedAsync();
-        
-        await db.FinancialOperations.AddRangeAsync(DefaultFinancialOperations);
-        await db.SaveChangesAsync();
+        var context = new InMemoryAppContext();
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+        context.FinancialOperations.AddRange(DefaultFinancialOperations);
+        context.SaveChanges();
 
-        _financialOperationService = new FinancialOperationService(db);
     }
+    
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        var mappingProfile = new DomainToResponseMappingProfile();
+        var config = new MapperConfiguration(cfg => cfg.AddProfile(mappingProfile));
 
+        var mapper = config.CreateMapper();
+        db = new InMemoryAppContext();
+        _financialOperationService = new FinancialOperationService(db, mapper);
+    }
+    
     [TestMethod]
     public async Task TestList()
     {
         var items = await _financialOperationService.List();
         Assert.AreEqual(DefaultFinancialOperations.Length, items.Count);
     }
-
+    
     [TestMethod]
     public async Task TestRetrieve()
     {
@@ -52,35 +64,40 @@ public class FinancialOperationServiceTest
         var item2 = await _financialOperationService.Retrieve(100);
         Assert.IsNull(item2);
     }
-
-
+    
+    
     [TestMethod]
     public async Task TestCreate()
     {
-        var item = new FinancialOperation("aaa", 100M, new DateTime(2040, 12, 31), 1, null);
-        item = await _financialOperationService.Create(item);
-        Assert.IsNotNull(item.Id);
+        var item = new CreateFinancialOperationDto()
+            { Description = "aaa", CreatedAt = new DateTime(2040, 12, 31), OperationTypeId = 1 };
+        var createdItem = await _financialOperationService.Create(item);
+        Assert.IsNotNull(createdItem.Id);
         
-        var itemInDb = await db.FinancialOperations.FindAsync(item.Id);;
+        var itemInDb = await db.FinancialOperations.FindAsync(createdItem.Id);;
         Assert.IsNotNull(itemInDb);
     }
-
+    
     [TestMethod]
     public async Task TestUpdate()
     {
         var item = await db.FinancialOperations.FindAsync(1);
         Assert.IsNotNull(item);
-
+    
         var changedDescription = "my new description";
-        item.Description = changedDescription;
-
-        await _financialOperationService.Update(item);
+        var dto = new UpdateFinancialOperationDto()
+        {
+            Description = changedDescription, Amount = item.Amount, CreatedAt = item.CreatedAt,
+            OperationTypeId = item.OperationTypeId
+        };
+    
+        await _financialOperationService.Update(item.Id, dto);
         
         var item2 = await db.FinancialOperations.FindAsync(1);
         Assert.IsNotNull(item2);
         Assert.AreEqual(changedDescription, item2.Description);
     }
-
+    
     [TestMethod]
     public async Task TestDelete()
     {
@@ -88,22 +105,6 @@ public class FinancialOperationServiceTest
         var item2 = await db.FinancialOperations.FindAsync(1);
         Assert.IsNull(item2);
     }
-    
-    [TestMethod]
-    public async Task TestGetPeriodicReport()
-    {
-        var startDate = new DateTime(2024, 4, 19);
-        var endDate = new DateTime(2024, 4, 20);
 
-        var reportForSingleDay = await _financialOperationService.GetPeriodicReport(startDate);
-        Assert.AreEqual(100M, reportForSingleDay.TotalIncome);
-        Assert.AreEqual(100M, reportForSingleDay.TotalExpense);
-        Assert.AreEqual(2, reportForSingleDay.Operations.Count);
-        
-        var reportForPeriod = await _financialOperationService.GetPeriodicReport(startDate, endDate);
-        Assert.AreEqual(200M, reportForPeriod.TotalIncome);
-        Assert.AreEqual(200M, reportForPeriod.TotalExpense);
-        Assert.AreEqual(4, reportForPeriod.Operations.Count);
-    }
     
 }

@@ -4,12 +4,7 @@ using Task11.Models;
 
 public class BaseApplicationContext: DbContext
 {
-    public DbSet<IncomeType> IncomeTypes { get; set; } = null!;
-    public DbSet<IncomeCategory> IncomeCategories { get; set; } = null!;
-    
-    public DbSet<ExpenseType> ExpenseTypes { get; set; } = null!;
-    public DbSet<ExpenseCategory> ExpenseCategories { get; set; } = null!;
-    
+    public DbSet<OperationType> OperationTypes { get; set; } = null!;
     public DbSet<FinancialOperation> FinancialOperations { get; set; } = null!;
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

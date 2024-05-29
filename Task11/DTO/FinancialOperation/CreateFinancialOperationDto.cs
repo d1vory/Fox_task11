@@ -1,18 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using Task11.DTO.OperationType;
 
-namespace Task11.Models;
+namespace Task11.DTO.FinancialOperation;
 
-public class FinancialOperation
+public class CreateFinancialOperationDto
 {
-    public int Id { get; set; }
-    
-    [StringLength(250)]
     public string Description { get; set; } = "";
-
-    public OperationType OperationType { get; set; } = null!;
     public int OperationTypeId { get; set; }
-    
     public decimal Amount { get; set; }
     public DateTime CreatedAt { get; set; }
-    
 }

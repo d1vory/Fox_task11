@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Task11.DTO.FinancialOperation;
 using Task11.Models;
-using Task11.Serializers;
 using Task11.Services;
 
 namespace Task11.Controllers;
@@ -19,15 +19,14 @@ public class FinancialOperationController: ControllerBase
     
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<FinancialOperation>>> List()
+    public async Task<ActionResult<IEnumerable<FinancialOperationDto>>> List([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
     {
-        var objects = await _service.List();
-        var serializedObjects = FinancialOperationSerializer.SerializeList(objects);
-        return Ok(serializedObjects);
+        var objects = await _service.List(startDate, endDate);
+        return Ok(objects);
     }
-
+    
     [HttpGet("{id}")]
-    public async Task<ActionResult<FinancialOperation>> Retrieve(int id)
+    public async Task<ActionResult<FinancialOperationDto>> Retrieve([FromRoute] int id)
     {
         var obj = await _service.Retrieve(id);
         if (obj == null)
@@ -35,61 +34,36 @@ public class FinancialOperationController: ControllerBase
             return NotFound();
         }
 
-        var serializer = new FinancialOperationSerializer(obj);
-        return new JsonResult(serializer);
+        return Ok(obj);
     }
-
+    
     [HttpPost]
-    public async Task<ActionResult<FinancialOperation>> Create(FinancialOperationSerializer serializer)
+    public async Task<ActionResult<FinancialOperationDto>> Create([FromBody] CreateFinancialOperationDto operationDto)
     {
-        var obj = await _service.Create(serializer.BuildInstance());
-        return CreatedAtAction(nameof(Retrieve), new { id = obj.Id }, new FinancialOperationSerializer(obj));
+        var obj = await _service.Create(operationDto);
+        return Ok(obj);
     }
     
     [HttpPut("{id}")]
-    public async Task<ActionResult<FinancialOperation>> Update(int id, FinancialOperationSerializer serializer)
+    public async Task<ActionResult<FinancialOperationDto>> Update([FromRoute] int id, [FromBody] UpdateFinancialOperationDto operationDto)
     {
-        var obj = await _service.Retrieve(id);
+        var obj = await _service.Update(id, operationDto);
         if (obj == null)
         {
             return NotFound();
         }
-        obj = serializer.UpdateInstance(obj);
-        await _service.Update(obj);
-        return RedirectToAction(nameof(Retrieve), new { id = obj.Id });
+        return Ok(obj);
     }
     
     [HttpDelete("{id}")]
-    public async Task<ActionResult<FinancialOperation>> Delete(int id)
+    public async Task<ActionResult> Delete([FromRoute] int id)
     {
-        await _service.Delete(id);
-        return Ok("ok");
-    }
-    
-    [HttpGet("dailyReport")]
-    public async Task<ActionResult<IEnumerable<FinancialOperation>>> GetDailyReport(DateOnly date)
-    {
-        var report = await _service.GetPeriodicReport(date.ToDateTime(TimeOnly.MinValue));
-        var kek = new
+        var isDeleted = await _service.Delete(id);
+        if (!isDeleted)
         {
-            report.TotalIncome,
-            report.TotalExpense,
-            Operations = FinancialOperationSerializer.SerializeList(report.Operations)
-        };
-        return Ok(kek);
-    }
-    
-    [HttpGet("periodicReport")]
-    public async Task<ActionResult<IEnumerable<FinancialOperation>>> GetPeriodicReport(DateOnly startDate, DateOnly endDate)
-    {
-        var report = await _service.GetPeriodicReport(startDate.ToDateTime(TimeOnly.MinValue), endDate.ToDateTime(TimeOnly.MinValue));
-        var kek = new
-        {
-            report.TotalIncome,
-            report.TotalExpense,
-            Operations = FinancialOperationSerializer.SerializeList(report.Operations)
-        };
-        return Ok(kek);
+            return NotFound();
+        }
+        return Ok();
     }
     
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Task11.Data;
 
@@ -11,9 +12,11 @@ using Task11.Data;
 namespace Task11.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240529132339_fix fin op")]
+    partial class fixfinop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace Task11.Data.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int>("OperationTypeId")
+                    b.Property<int?>("OperationTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -180,9 +183,7 @@ namespace Task11.Data.Migrations
                 {
                     b.HasOne("Task11.Models.OperationType", "OperationType")
                         .WithMany()
-                        .HasForeignKey("OperationTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OperationTypeId");
 
                     b.Navigation("OperationType");
                 });

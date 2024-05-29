@@ -1,4 +1,6 @@
+using Task11;
 using Task11.Data;
+using Task11.DTO;
 using Task11.Services;
 
 
@@ -9,10 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<BaseApplicationContext, ApplicationContext>();
-builder.Services.AddTransient<IncomeTypeService>();
-builder.Services.AddTransient<ExpenseTypeService>();
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddDbContext<BaseApplicationContext, ApplicationContext>(ServiceLifetime.Transient);
+builder.Services.AddTransient<OperationTypeService>();
 builder.Services.AddTransient<FinancialOperationService>();
+builder.Services.AddTransient<ReportService>();
+
 
 var app = builder.Build();
 
@@ -23,6 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseRouting();
 app.MapControllers();
