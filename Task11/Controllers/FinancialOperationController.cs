@@ -44,19 +44,17 @@ public class FinancialOperationController: ControllerBase
         return Ok(obj);
     }
     
-    // [HttpPut("{id}")]
-    // public async Task<ActionResult<FinancialOperation>> Update(int id, FinancialOperationSerializer serializer)
-    // {
-    //     var obj = await _service.Retrieve(id);
-    //     if (obj == null)
-    //     {
-    //         return NotFound();
-    //     }
-    //     obj = serializer.UpdateInstance(obj);
-    //     await _service.Update(obj);
-    //     return RedirectToAction(nameof(Retrieve), new { id = obj.Id });
-    // }
-    //
+    [HttpPut("{id}")]
+    public async Task<ActionResult<FinancialOperation>> Update([FromRoute] int id, [FromBody] UpdateFinancialOperationDto operationDto)
+    {
+        var obj = await _service.Update(id, operationDto);
+        if (obj == null)
+        {
+            return NotFound();
+        }
+        return Ok(obj);
+    }
+    
     // [HttpDelete("{id}")]
     // public async Task<ActionResult<FinancialOperation>> Delete(int id)
     // {

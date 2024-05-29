@@ -14,6 +14,7 @@ public class DomainToResponseMappingProfile: Profile
         
         CreateMap<Models.FinancialOperation, FinancialOperationDto>();
         CreateMap<CreateFinancialOperationDto, Models.FinancialOperation>();
+        CreateMap<UpdateFinancialOperationDto, Models.FinancialOperation>();
     }
     
 }

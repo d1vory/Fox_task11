@@ -46,6 +46,10 @@ public class OperationTypeController: ControllerBase
     public async Task<ActionResult<OperationTypeDto>> Update([FromRoute] int id, [FromBody] UpdateOperationTypeDto operationTypeDto)
     {
         var obj = await _typeService.Update(id, operationTypeDto);
+        if (obj == null)
+        {
+            return NotFound();
+        }
         return Ok(obj);
     }
 

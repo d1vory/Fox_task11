@@ -49,11 +49,19 @@ public class FinancialOperationService
         return _mapper.Map<FinancialOperationDto>(instance);
     }
 
-    public async Task<FinancialOperation> Update(FinancialOperation instance)
+    public async Task<FinancialOperationDto?> Update(int instanceId, UpdateFinancialOperationDto operationDto)
     {
-        _db.FinancialOperations.Update(instance);
+        var instance = await _db.FinancialOperations.FindAsync(instanceId);
+        if (instance == null)
+        {
+            return null;
+        }
+        await ValidateOperationType(operationDto.OperationTypeId);
+        _mapper.Map(operationDto, instance);
+        _db.Entry(instance).State = EntityState.Modified;
         await _db.SaveChangesAsync();
-        return instance;
+        await _db.Entry(instance).Reference(f=>f.OperationType).LoadAsync();
+        return _mapper.Map<FinancialOperationDto>(instance);
     }
     
     public async Task Delete(int id)

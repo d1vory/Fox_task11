@@ -35,10 +35,14 @@ public class OperationTypeService
         return _mapper.Map<OperationTypeDto>(instance);
     }
 
-    public async Task<OperationTypeDto> Update(int instanceId, UpdateOperationTypeDto operationType)
+    public async Task<OperationTypeDto?> Update(int instanceId, UpdateOperationTypeDto operationType)
     {
-        var instance = _mapper.Map<OperationType>(operationType);
-        instance.Id = instanceId;
+        var instance = await _db.OperationTypes.FindAsync(instanceId);
+        if (instance == null)
+        {
+            return null;
+        }
+        _mapper.Map(operationType, instance);
         _db.Entry(instance).State = EntityState.Modified;
         await _db.SaveChangesAsync();
         return _mapper.Map<OperationTypeDto>(instance);
