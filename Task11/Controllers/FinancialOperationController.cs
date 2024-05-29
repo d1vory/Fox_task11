@@ -19,9 +19,9 @@ public class FinancialOperationController: ControllerBase
     
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<FinancialOperation>>> List()
+    public async Task<ActionResult<IEnumerable<FinancialOperationDto>>> List([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
     {
-        var objects = await _service.List();
+        var objects = await _service.List(startDate, endDate);
         return Ok(objects);
     }
     
@@ -45,7 +45,7 @@ public class FinancialOperationController: ControllerBase
     }
     
     [HttpPut("{id}")]
-    public async Task<ActionResult<FinancialOperation>> Update([FromRoute] int id, [FromBody] UpdateFinancialOperationDto operationDto)
+    public async Task<ActionResult<FinancialOperationDto>> Update([FromRoute] int id, [FromBody] UpdateFinancialOperationDto operationDto)
     {
         var obj = await _service.Update(id, operationDto);
         if (obj == null)
@@ -56,7 +56,7 @@ public class FinancialOperationController: ControllerBase
     }
     
     [HttpDelete("{id}")]
-    public async Task<ActionResult<FinancialOperation>> Delete([FromRoute] int id)
+    public async Task<ActionResult> Delete([FromRoute] int id)
     {
         var isDeleted = await _service.Delete(id);
         if (!isDeleted)

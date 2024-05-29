@@ -16,13 +16,21 @@ public class FinancialOperationService
         _mapper = mapper;
     }
     
-    public async Task<List<FinancialOperationDto>> List()
+    public async Task<List<FinancialOperationDto>> List(DateTime? startDate, DateTime? endDate)
     {
-        var objects = await _db.FinancialOperations
-            .Include(f => f.OperationType)
-            .ToListAsync();
-        return objects.Select(obj => _mapper.Map<FinancialOperationDto>(obj)).ToList();
-    }
+        IQueryable<FinancialOperation> objects = _db.FinancialOperations
+            .Include(f => f.OperationType);
+        if (startDate != null)
+        {
+            objects = objects.Where(f => f.TimeStamp.Date >= startDate.Value.Date);
+        }
+        if (endDate != null)
+        {
+            objects = objects.Where(f => f.TimeStamp.Date <= endDate.Value.Date);
+        }
+
+        return objects.ProjectToList<FinancialOperationDto>(_mapper.ConfigurationProvider);
+     }
     
     public async Task<FinancialOperationDto?> Retrieve(int id)
     {
