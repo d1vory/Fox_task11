@@ -1,3 +1,4 @@
+using Task11;
 using Task11.Data;
 using Task11.DTO;
 using Task11.Services;
@@ -26,6 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseRouting();
 app.MapControllers();

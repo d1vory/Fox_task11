@@ -56,22 +56,12 @@ public class OperationTypeController: ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
+        var isDeleted = await _typeService.Delete(id);
+        if (!isDeleted)
         {
-            try
-            {
-                var isDeleted = await _typeService.Delete(id);
-                if (!isDeleted)
-                {
-                    return NotFound();
-                }
-            }
-            catch (ApplicationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-            return Ok();
+            return NotFound();
         }
+        
+        return Ok();
     }
-    
 }

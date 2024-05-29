@@ -18,7 +18,7 @@ public class OperationTypeService
     
     public async Task<List<OperationTypeDto>> List()
     {
-        return await _db.OperationTypes.ProjectToListAsync<OperationTypeDto>(_mapper.ConfigurationProvider);
+        return _db.OperationTypes.ProjectToList<OperationTypeDto>(_mapper.ConfigurationProvider);
     }
     
     public async Task<OperationTypeDto?> Retrieve(int id)
@@ -29,6 +29,7 @@ public class OperationTypeService
     
     public async Task<OperationTypeDto> Create(CreateOperationTypeDto operationType)
     {
+        await ValidateName(operationType.Name);
         var instance = _mapper.Map<OperationType>(operationType);
         await _db.OperationTypes.AddAsync(instance);
         await _db.SaveChangesAsync();
@@ -37,6 +38,7 @@ public class OperationTypeService
 
     public async Task<OperationTypeDto?> Update(int instanceId, UpdateOperationTypeDto operationType)
     {
+        await ValidateName(operationType.Name);
         var instance = await _db.OperationTypes.FindAsync(instanceId);
         if (instance == null)
         {
@@ -64,6 +66,14 @@ public class OperationTypeService
         _db.OperationTypes.Remove(instance);
         await _db.SaveChangesAsync();
         return true;
+    }
+    
+    public async Task ValidateName(string value)
+    {
+        if (await _db.OperationTypes.AnyAsync(ot => ot.Name == value))
+        {
+            throw new ApplicationException("This income type does not exist");
+        }
     }
 
 }
