@@ -38,7 +38,7 @@ public class OperationTypeService
 
     public async Task<OperationTypeDto?> Update(int instanceId, UpdateOperationTypeDto operationType)
     {
-        await ValidateName(operationType.Name);
+        await ValidateName(operationType.Name, instanceId);
         var instance = await _db.OperationTypes.FindAsync(instanceId);
         if (instance == null)
         {
@@ -68,9 +68,13 @@ public class OperationTypeService
         return true;
     }
     
-    public async Task ValidateName(string value)
+    public async Task ValidateName(string value, int? id = null)
     {
-        if (await _db.OperationTypes.AnyAsync(ot => ot.Name == value))
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new ApplicationException("Name should be filled");
+        }
+        if (await _db.OperationTypes.AnyAsync(ot => ot.Name == value && ot.Id != id))
         {
             throw new ApplicationException("This income type does not exist");
         }

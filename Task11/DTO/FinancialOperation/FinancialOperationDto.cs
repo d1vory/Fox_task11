@@ -9,5 +9,5 @@ public class FinancialOperationDto
     public string Description { get; set; } = "";
     public OperationTypeDto OperationType { get; set; }
     public decimal Amount { get; set; }
-    public DateTime TimeStamp { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

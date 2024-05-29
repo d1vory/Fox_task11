@@ -15,8 +15,8 @@ public class FinancialOperationService
         _db = db;
         _mapper = mapper;
     }
-    
-    public async Task<List<FinancialOperationDto>> List(DateTime? startDate, DateTime? endDate)
+
+    public async Task<List<FinancialOperationDto>> List(DateTime? startDate = null, DateTime? endDate = null)
     {
         IQueryable<FinancialOperation> objects = _db.FinancialOperations
             .Include(f => f.OperationType);
