@@ -76,7 +76,7 @@ public class OperationTypeService
         }
         if (await _db.OperationTypes.AnyAsync(ot => ot.Name == value && ot.Id != id))
         {
-            throw new ApplicationException("This income type does not exist");
+            throw new ApplicationException("This operation type already exists");
         }
     }
 
