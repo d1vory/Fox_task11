@@ -15,8 +15,6 @@ public class OperationTypeServiceTest
 
     public InMemoryAppContext db;
     private OperationTypeService _operationTypeService;
-    IMapper _mapper;
-    MapperConfiguration _config;
     
     [TestInitialize]
     public void TestInitialize()
@@ -25,10 +23,10 @@ public class OperationTypeServiceTest
         db.Database.EnsureDeleted();
         db.Database.EnsureCreated();
         var mappingProfile = new DomainToResponseMappingProfile();
-        _config = new MapperConfiguration(cfg => cfg.AddProfile(mappingProfile));
+        var config = new MapperConfiguration(cfg => cfg.AddProfile(mappingProfile));
 
-        _mapper = _config.CreateMapper();
-        _operationTypeService = new OperationTypeService(db, _mapper);
+        var mapper = config.CreateMapper();
+        _operationTypeService = new OperationTypeService(db, mapper);
     }
 
     [TestMethod]
@@ -93,6 +91,20 @@ public class OperationTypeServiceTest
         await _operationTypeService.Delete(3);
         var item2 = await db.OperationTypes.FindAsync(3);
         Assert.IsNull(item2);
+    }
+    
+    [TestMethod]
+    public async Task TestValidateName()
+    {
+        var item = await db.OperationTypes.FindAsync(2);
+        Assert.IsNotNull(item);
+
+        await _operationTypeService.ValidateName(item.Name, item.Id);
+
+        await Assert.ThrowsExceptionAsync<ApplicationException>(async () => await _operationTypeService.ValidateName(item.Name));
+        await Assert.ThrowsExceptionAsync<ApplicationException>(async () => await _operationTypeService.ValidateName(null));
+        await Assert.ThrowsExceptionAsync<ApplicationException>(async () => await _operationTypeService.ValidateName(""));
+
     }
     
 }
