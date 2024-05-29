@@ -14,6 +14,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<BaseApplicationContext, ApplicationContext>(ServiceLifetime.Transient);
 builder.Services.AddTransient<OperationTypeService>();
 builder.Services.AddTransient<FinancialOperationService>();
+builder.Services.AddTransient<ReportService>();
 
 
 var app = builder.Build();

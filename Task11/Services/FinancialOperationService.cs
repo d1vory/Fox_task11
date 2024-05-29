@@ -10,13 +10,6 @@ public class FinancialOperationService
     private readonly BaseApplicationContext _db;
     private readonly IMapper _mapper;
     
-    public record Report
-    {
-        public decimal TotalIncome { get; set; }
-        public decimal TotalExpense { get; set; }
-        public List<FinancialOperation> Operations { get; set; }
-    }
-
     public FinancialOperationService(BaseApplicationContext db, IMapper mapper)
     {
         _db = db;
@@ -64,37 +57,18 @@ public class FinancialOperationService
         return _mapper.Map<FinancialOperationDto>(instance);
     }
     
-    public async Task Delete(int id)
+    public async Task<bool> Delete(int id)
     {
         var instance = await _db.FinancialOperations.FindAsync(id);
         if (instance == null)
         {
-            return;
+            return false;
         }
 
         _db.FinancialOperations.Remove(instance);
         await _db.SaveChangesAsync();
+        return true;
     }
-    
-    public async Task<Report> GetPeriodicReport(DateTime startDate, DateTime? endDate=null)
-    {
-        IQueryable<FinancialOperation> operationsOnDate;
-        if (!endDate.HasValue)
-        {
-            operationsOnDate = _db.FinancialOperations.Where(f => f.TimeStamp.Date == startDate.Date);
-        }
-        else
-        {
-            operationsOnDate = _db.FinancialOperations.Where(f => f.TimeStamp.Date >= startDate.Date && f.TimeStamp.Date <= endDate.Value.Date);
-        }
-        // var totalIncome = await operationsOnDate.Where(f=> f.IncomeTypeId != null).SumAsync(f => f.Amount);
-        // var totalExpense = await operationsOnDate.Where(f=> f.ExpenseTypeId != null).SumAsync(f => f.Amount);
-        return new Report();
-        // {
-        //     TotalIncome = totalIncome, TotalExpense = totalExpense, Operations = await operationsOnDate.ToListAsync()
-        // };
-    }
-    
     
     public async Task ValidateOperationType(int value)
     {

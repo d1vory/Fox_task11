@@ -55,37 +55,15 @@ public class FinancialOperationController: ControllerBase
         return Ok(obj);
     }
     
-    // [HttpDelete("{id}")]
-    // public async Task<ActionResult<FinancialOperation>> Delete(int id)
-    // {
-    //     await _service.Delete(id);
-    //     return Ok("ok");
-    // }
-    //
-    // [HttpGet("dailyReport")]
-    // public async Task<ActionResult<IEnumerable<FinancialOperation>>> GetDailyReport(DateOnly date)
-    // {
-    //     var report = await _service.GetPeriodicReport(date.ToDateTime(TimeOnly.MinValue));
-    //     var kek = new
-    //     {
-    //         report.TotalIncome,
-    //         report.TotalExpense,
-    //         Operations = FinancialOperationSerializer.SerializeList(report.Operations)
-    //     };
-    //     return Ok(kek);
-    // }
-    //
-    // [HttpGet("periodicReport")]
-    // public async Task<ActionResult<IEnumerable<FinancialOperation>>> GetPeriodicReport(DateOnly startDate, DateOnly endDate)
-    // {
-    //     var report = await _service.GetPeriodicReport(startDate.ToDateTime(TimeOnly.MinValue), endDate.ToDateTime(TimeOnly.MinValue));
-    //     var kek = new
-    //     {
-    //         report.TotalIncome,
-    //         report.TotalExpense,
-    //         Operations = FinancialOperationSerializer.SerializeList(report.Operations)
-    //     };
-    //     return Ok(kek);
-    // }
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<FinancialOperation>> Delete([FromRoute] int id)
+    {
+        var isDeleted = await _service.Delete(id);
+        if (!isDeleted)
+        {
+            return NotFound();
+        }
+        return Ok();
+    }
     
 }
