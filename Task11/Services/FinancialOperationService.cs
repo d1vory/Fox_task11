@@ -22,11 +22,11 @@ public class FinancialOperationService
             .Include(f => f.OperationType);
         if (startDate != null)
         {
-            objects = objects.Where(f => f.TimeStamp.Date >= startDate.Value.Date);
+            objects = objects.Where(f => f.CreatedAt.Date >= startDate.Value.Date);
         }
         if (endDate != null)
         {
-            objects = objects.Where(f => f.TimeStamp.Date <= endDate.Value.Date);
+            objects = objects.Where(f => f.CreatedAt.Date <= endDate.Value.Date);
         }
 
         return objects.ProjectToList<FinancialOperationDto>(_mapper.ConfigurationProvider);

@@ -29,13 +29,13 @@ public class ReportService
         {
             operationsOnDate = _db.FinancialOperations
                 .Include(f=> f.OperationType)
-                .Where(f => f.TimeStamp.Date == startDate.Date);
+                .Where(f => f.CreatedAt.Date == startDate.Date);
         }
         else
         {
             operationsOnDate = _db.FinancialOperations
                 .Include(f=> f.OperationType)
-                .Where(f => f.TimeStamp.Date >= startDate.Date && f.TimeStamp.Date <= endDate.Value.Date);
+                .Where(f => f.CreatedAt.Date >= startDate.Date && f.CreatedAt.Date <= endDate.Value.Date);
         }
         var totalIncome = await operationsOnDate.Where(f=> f.OperationType.IsIncome).SumAsync(f => f.Amount);
         var totalExpense = await operationsOnDate.Where(f=> !f.OperationType.IsIncome).SumAsync(f => f.Amount);
