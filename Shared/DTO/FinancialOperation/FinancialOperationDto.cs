@@ -1,7 +1,6 @@
-using System.ComponentModel.DataAnnotations;
-using Task11.DTO.OperationType;
+using Shared.DTO.OperationType;
 
-namespace Task11.DTO.FinancialOperation;
+namespace Shared.DTO.FinancialOperation;
 
 public class FinancialOperationDto
 {

@@ -1,6 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Task11.DTO.OperationType;
+using Shared.DTO.OperationType;
 using Task11.Models;
 
 namespace Task11.Services;

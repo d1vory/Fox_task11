@@ -1,6 +1,6 @@
 using AutoMapper;
-using Task11.DTO.FinancialOperation;
-using Task11.DTO.OperationType;
+using Shared.DTO.FinancialOperation;
+using Shared.DTO.OperationType;
 
 namespace Task11.DTO;
 

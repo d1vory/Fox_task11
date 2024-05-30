@@ -1,9 +1,7 @@
 
-using AutoMapper;
+namespace Shared.DTO.OperationType;
 
-namespace Task11.DTO.OperationType;
-
-public class CreateOperationTypeDto
+public class UpdateOperationTypeDto
 {
     public string Name { get; set; }
     public string Description { get; set; } = "";

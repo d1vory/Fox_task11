@@ -1,7 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-using Task11.DTO.OperationType;
-
-namespace Task11.DTO.FinancialOperation;
+namespace Shared.DTO.FinancialOperation;
 
 public class UpdateFinancialOperationDto
 {

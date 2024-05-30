@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Task11.DTO.FinancialOperation;
+using Shared.DTO.FinancialOperation;
 using Task11.Models;
 using Task11.Services;
 
