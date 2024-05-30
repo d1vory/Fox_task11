@@ -1,0 +1,46 @@
+@using Shared2.DTO.OperationType
+
+@if (loading)
+{
+    <span class="spinner-border spinner-border-sm mr-1"></span>
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            Create New OperationType
+        </div>
+        <div class="card-body">
+            <EditForm Model="@operationType" OnValidSubmit="@OnValidSubmit">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <InputText class="form-control" @bind-Value="@operationType.Name" id="name" placeholder="Enter name"/>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <InputTextArea class="form-control" @bind-Value="@operationType.Description" id="description" rows="3" placeholder="Enter description"></InputTextArea >
+                </div>
+                <div class="form-check">
+                    <InputCheckbox class="form-check-input" id="isTaxable" @bind-Value="@operationType.IsTaxable"/>
+                    <label class="form-check-label" for="isTaxable">Is Taxable</label>
+                </div>
+                <div class="form-check">
+                    <InputCheckbox class="form-check-input" id="isIncome" @bind-Value="@operationType.IsIncome"/>
+                    <label class="form-check-label" for="isIncome">Is Income</label>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Create</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public BaseWriteOperationTypeDto operationType  { get; set; }
+    
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+    
+    [Parameter]
+    public bool loading {get; set;} = false;
+}
