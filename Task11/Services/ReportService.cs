@@ -1,7 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Shared.DTO.FinancialOperation;
-using Shared.DTO.Reports;
+using Shared2.DTO.FinancialOperation;
+using Shared2.DTO.Reports;
 using Task11.Models;
 
 namespace Task11.Services;

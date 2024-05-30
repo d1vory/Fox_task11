@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Shared.DTO.Reports;
+using Shared2.DTO.Reports;
 using Task11.Services;
 
 namespace Task11.Controllers;

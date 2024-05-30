@@ -1,4 +1,4 @@
-namespace Shared.DTO.FinancialOperation;
+namespace Shared2.DTO.FinancialOperation;
 
 public class CreateFinancialOperationDto
 {

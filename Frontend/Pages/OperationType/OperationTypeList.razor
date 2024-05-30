@@ -1,4 +1,6 @@
 @page "/operation_types"
+@using Shared2.DTO.OperationType
+@inject HttpClient Http
 
 <div class="card mt-4">
     <div class="card-header">
@@ -17,19 +19,26 @@
             </tr>
             </thead>
             <tbody>
-                @* @foreach (var forecast in forecasts) *@
-                @*         { *@
-                @*             <tr> *@
-                @*                 <td>@forecast.Date.ToShortDateString()</td> *@
-                @*                 <td>@forecast.TemperatureC</td> *@
-                @*                 <td>@forecast.TemperatureF</td> *@
-                @*                 <td>@forecast.Summary</td> *@
-                @*             </tr> *@
-                @*         } *@
+                @foreach (var forecast in forecasts)
+                        {
+                            <tr>
+                                <td>@forecast.Date.ToShortDateString()</td>
+                                <td>@forecast.TemperatureC</td>
+                                <td>@forecast.TemperatureF</td>
+                                <td>@forecast.Summary</td>
+                            </tr>
+                        }
             </tbody>
         </table>
     </div>
 </div>
 
 @code {
+    private OperationTypeDto[]? forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await Http.GetFromJsonAsync<OperationTypeDto[]>("sample-data/weather.json");
+    }
+
 }

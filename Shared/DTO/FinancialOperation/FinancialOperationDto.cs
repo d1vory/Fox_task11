@@ -1,6 +1,6 @@
-using Shared.DTO.OperationType;
+using Shared2.DTO.OperationType;
 
-namespace Shared.DTO.FinancialOperation;
+namespace Shared2.DTO.FinancialOperation;
 
 public class FinancialOperationDto
 {

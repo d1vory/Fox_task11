@@ -1,6 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Shared.DTO.FinancialOperation;
+using Shared2.DTO.FinancialOperation;
 using Task11.Models;
 
 namespace Task11.Services;

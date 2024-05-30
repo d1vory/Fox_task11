@@ -1,6 +1,6 @@
-using Shared.DTO.FinancialOperation;
+using Shared2.DTO.FinancialOperation;
 
-namespace Shared.DTO.Reports;
+namespace Shared2.DTO.Reports;
 
 public class FinOpReportDto
 {
