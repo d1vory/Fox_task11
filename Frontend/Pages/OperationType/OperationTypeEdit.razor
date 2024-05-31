@@ -1,6 +1,38 @@
-@page "/operation_type/"
-<h3>OperationTypeEdit</h3>
+@page "/operation_types/{Id}/edit"
+@using Shared2.DTO.OperationType
+@using Frontend.Services
+@inject HttpClient Http
+@inject NavigationManager navManager
+@inject OperationTypeService MyService
+
+
+<OperationTypeForm  operationType="@dto" OnValidSubmit="@Update" Loading="@Loading" HeaderText="Create New OperationType"/>
 
 @code {
+    [Parameter]
+    public string Id { get; set; }
     
+    public bool Loading = false;
+    public UpdateOperationTypeDto dto = new UpdateOperationTypeDto();
+
+
+    protected async override Task OnParametersSetAsync()
+    {
+        dto = await MyService.Retrieve(int.Parse(Id));
+    }
+
+    async Task Update()
+    {
+        Loading = true;
+        try
+        {
+            var updatedObj = await MyService.Update(dto, int.Parse(Id));
+            navManager.NavigateTo($"/operation_types");
+        }
+        catch (Exception ex)
+        {
+            Loading = false;
+            StateHasChanged();
+        }
+    }
 }

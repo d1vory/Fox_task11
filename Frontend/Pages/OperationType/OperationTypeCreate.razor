@@ -3,8 +3,9 @@
 @using Frontend.Services
 @inject NavigationManager navManager
 @inject HttpClient Http
+@inject OperationTypeService MyService
 
-<OperationTypeForm  operationType="@dto" OnValidSubmit="@Create" loading="@loading" />
+<OperationTypeForm  operationType="@dto" OnValidSubmit="@Create" Loading="@loading" HeaderText="Create New OperationType"/>
 
 
 @code {
@@ -16,8 +17,7 @@
         loading = true;
         try
         {
-            var service = new OperationTypeService(Http);
-            var createdObj = await service.Create(dto);
+            var createdObj = await MyService.Create(dto);
             navManager.NavigateTo($"/operation_types/{createdObj.Id}");
         }
         catch (Exception ex)

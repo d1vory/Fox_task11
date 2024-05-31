@@ -1,6 +1,6 @@
 @using Shared2.DTO.OperationType
 
-@if (loading)
+@if (Loading)
 {
     <span class="spinner-border spinner-border-sm mr-1"></span>
 }
@@ -8,7 +8,8 @@ else
 {
     <div class="card">
         <div class="card-header">
-            Create New OperationType
+            
+            @HeaderText
         </div>
         <div class="card-body">
             <EditForm Model="@operationType" OnValidSubmit="@OnValidSubmit">
@@ -28,7 +29,7 @@ else
                     <InputCheckbox class="form-check-input" id="isIncome" @bind-Value="@operationType.IsIncome"/>
                     <label class="form-check-label" for="isIncome">Is Income</label>
                 </div>
-                <button type="submit" class="btn btn-primary mt-2">Create</button>
+                <button type="submit" class="btn btn-primary mt-2">Submit</button>
             </EditForm>
         </div>
     </div>
@@ -42,5 +43,8 @@ else
     public EventCallback OnValidSubmit { get; set; }
     
     [Parameter]
-    public bool loading {get; set;} = false;
+    public bool Loading {get; set;} = false;
+    
+    [Parameter]
+    public string HeaderText { get; set; }
 }
