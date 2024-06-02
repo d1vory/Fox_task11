@@ -8,6 +8,8 @@
 <OperationTypeForm operationType="@_dto" OnValidSubmit="@Create" Loading="@_loading" HeaderText="Create New OperationType"/>
 
 @code {
+    [CascadingParameter(Name = "ErrorComponent")]
+    protected IErrorComponent ErrorComponent { get; set; }
     private bool _loading = false;
     private CreateOperationTypeDto _dto = new CreateOperationTypeDto();
 
@@ -22,7 +24,7 @@
         catch (Exception ex)
         {
             _loading = false;
-            StateHasChanged();
+            ErrorComponent.ShowError(ex.Message);
         }
     }
 

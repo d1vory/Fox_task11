@@ -1,4 +1,5 @@
 ﻿@page "/counter"
+@using Frontend.Components
 
 <PageTitle>Counter</PageTitle>
 
@@ -8,12 +9,31 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+
 @code {
+    [CascadingParameter(Name = "ErrorComponent")]
+    protected IErrorComponent ErrorComponent { get; set; }
+    
     private int currentCount = 0;
 
     private void IncrementCount()
     {
         currentCount++;
+        try
+        {
+            kek(currentCount);
+        }
+        catch(Exception e)
+        {
+            ErrorComponent.ShowError(e.Message, e.StackTrace);
+        }
     }
 
+    private void kek(int c)
+    {
+        if (currentCount > 3)
+        {
+            throw new InvalidOperationException("Current count is too big!");
+        }
+    }
 }

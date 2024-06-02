@@ -21,7 +21,7 @@ public class ErrorHandlingMiddleware
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = 400;
-            var body = JsonConvert.SerializeObject(ex.Message);
+            var body = JsonConvert.SerializeObject(new {Message=ex.Message});
             await context.Response.WriteAsync(body);
         }
     }

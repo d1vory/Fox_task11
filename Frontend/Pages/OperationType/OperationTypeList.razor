@@ -74,13 +74,23 @@ else{
     </div>
 }
 @code {
+    [CascadingParameter(Name = "ErrorComponent")]
+    protected IErrorComponent ErrorComponent { get; set; }
     private List<OperationTypeDto>? _operationTypes = [];
     private bool _dialogShown = false;
     private OperationTypeDto? _selectedOperationType;
+
     
     protected override async Task OnInitializedAsync()
     {
-        _operationTypes = await MyService.List();
+        try
+        {
+            _operationTypes = await MyService.List();
+        }
+        catch (ApplicationException e)
+        {
+            ErrorComponent.ShowError(e.Message);
+        }
     }
     
     private void ShowDeleteDialog(OperationTypeDto obj)
@@ -93,7 +103,14 @@ else{
     {
         if (_selectedOperationType != null)
         {
-            await MyService.Delete(_selectedOperationType);
+            try
+            {
+                await MyService.Delete(_selectedOperationType);
+            }
+            catch (ApplicationException e)
+            {
+                ErrorComponent.ShowError(e.Message);
+            }
             _operationTypes?.Remove(_selectedOperationType);
             _dialogShown = false;
         }
