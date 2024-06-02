@@ -1,0 +1,41 @@
+@page "/operations/{Id}/edit"
+@using Frontend.Components
+@using Frontend.Services
+@using Shared2.DTO.FinancialOperation
+@inject NavigationManager NavManager
+@inject FinancialOperationService Service
+
+<FinancialOperationForm operation="@_dto" OnValidSubmit="@Update" Loading="@_loading" HeaderText="Update operation"/>
+
+@code {
+    [CascadingParameter(Name = "ErrorComponent")]
+    protected IErrorComponent ErrorComponent { get; set; }
+    [Parameter] public string Id { get; set; }
+
+    private bool _loading = false;
+    private UpdateFinancialOperationDto _dto = new UpdateFinancialOperationDto();
+    
+    protected async override Task OnParametersSetAsync()
+    {
+        var obj = await Service.Retrieve(int.Parse(Id));
+        _dto.Description = obj.Description;
+        _dto.Amount = obj.Amount;
+        _dto.CreatedAt = obj.CreatedAt;
+        _dto.OperationTypeId = obj.OperationType.Id;
+    }
+
+    private async Task Update()
+    {
+        _loading = true;
+        try
+        {
+            var updatedObj = await Service.Update(_dto, int.Parse(Id));
+            NavManager.NavigateTo($"/operations");
+        }
+        catch (Exception ex)
+        {
+            _loading = false;
+            ErrorComponent.ShowError(ex.Message);
+        }
+    }
+}

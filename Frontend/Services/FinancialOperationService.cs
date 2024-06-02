@@ -18,9 +18,9 @@ public class FinancialOperationService
         return await _httpClient.GetFromJsonAsync<List<FinancialOperationDto>>("api/operation");
     }
 
-    public async Task<UpdateFinancialOperationDto> Retrieve(int id)
+    public async Task<FinancialOperationDto> Retrieve(int id)
     {
-        var obj = await _httpClient.GetFromJsonAsync<UpdateFinancialOperationDto>($"api/operation/{id}/");
+        var obj = await _httpClient.GetFromJsonAsync<FinancialOperationDto>($"api/operation/{id}/");
         if (obj == null)
         {
             throw new ApplicationException("Not found");
