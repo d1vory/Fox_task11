@@ -15,7 +15,13 @@ public class OperationTypeService
 
     public async Task<List<OperationTypeDto>?> List()
     {
-        return await _httpClient.GetFromJsonAsync<List<OperationTypeDto>>("api/operation_type");
+        var res = await _httpClient.GetFromJsonAsync<List<OperationTypeDto>>("api/operation_type");
+        if (res == null)
+        {
+            throw new ApplicationException("Could not get data");
+        }
+
+        return res;
     }
 
     public async Task<UpdateOperationTypeDto> Retrieve(int id)

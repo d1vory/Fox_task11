@@ -12,7 +12,8 @@ else
 {
     <div class="card">
         <div class="card-header">
-            Financial Operations
+            <h2>Financial Operations</h2>
+            <NavLink class="btn btn-primary" href="operations/create">Create new</NavLink>
         </div>
         <div class="card-body">
             <table class="table table-bordered">
@@ -64,12 +65,14 @@ else
 }
 
 @code {
+
     [CascadingParameter(Name = "ErrorComponent")]
     protected IErrorComponent ErrorComponent { get; set; }
+
     private List<FinancialOperationDto>? _operations = [];
     private bool _dialogShown = false;
     private FinancialOperationDto? _selectedOperation;
-    
+
     protected override async Task OnInitializedAsync()
     {
         try
@@ -81,7 +84,7 @@ else
             ErrorComponent.ShowError(e.Message);
         }
     }
-    
+
     private void ShowDeleteDialog(FinancialOperationDto obj)
     {
         _selectedOperation = obj;

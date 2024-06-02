@@ -1,0 +1,86 @@
+@using Shared2.DTO.FinancialOperation
+@using Shared2.DTO.OperationType
+@using Frontend.Services
+@inject OperationTypeService OperationTypeService
+
+
+@if (Loading)
+{
+    <span class="spinner-border spinner-border-sm mr-1"></span>
+}
+else
+{
+
+    <div class="card">
+        <div class="card-header">
+            Create New Operation
+        </div>
+        <div class="card-body">
+            <EditForm Model="@operation" OnValidSubmit="@OnValidSubmit">
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <InputText type="text" class="form-control" id="description" @bind-Value="@operation.Description" required/>
+                </div>
+                <div class="form-group">
+                    <label for="operationType">Operation Type:</label>
+                    <InputSelect class="form-control" id="operationType" @bind-Value="@operation.OperationTypeId"  required>
+                        @foreach(var ot in _operationTypes)
+                        {
+                            <option value="@ot.Id">
+                                @if (ot.IsIncome)
+                                {
+                                    @:Income
+                                }
+                                else
+                                {
+                                    @:Expense
+                                }
+                                | @ot.Name
+                                
+                            </option>
+                        }
+                    </InputSelect>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Amount:</label>
+                    <InputNumber type="number" class="form-control" id="amount" step="0.01" @bind-Value="@operation.Amount" required/>
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    [CascadingParameter(Name = "ErrorComponent")]
+    protected IErrorComponent ErrorComponent { get; set; }
+    
+    [Parameter]
+    public BaseWriteFinancialOperationDto operation  { get; set; }
+    
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+    
+    [Parameter]
+    public bool Loading {get; set;} = true;
+    
+    [Parameter]
+    public string HeaderText { get; set; }
+    
+    private List<OperationTypeDto>? _operationTypes = [];
+    
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _operationTypes = await OperationTypeService.List();
+            _operationTypes = _operationTypes.OrderBy(ot => ot.IsIncome).ToList();
+            Loading = false;
+        }
+        catch (ApplicationException e)
+        {
+            ErrorComponent.ShowError(e.Message);
+        }
+    }
+    
+}
