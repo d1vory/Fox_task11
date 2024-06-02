@@ -15,16 +15,8 @@ public class ReportController: ControllerBase
         _service = service;
     }
     
-    
-    [HttpGet("daily")]
-    public async Task<ActionResult<FinOpReportDto>> GetDailyReport([FromQuery] DateTime date)
-    {
-        var report = await _service.GetDailyReport(date);
-        return Ok(report);
-    }
-    
-    [HttpGet("periodic")]
-    public async Task<ActionResult<FinOpReportDto>> GetPeriodicReport([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+    [HttpGet("operations")]
+    public async Task<ActionResult<FinOpReportDto>> GetPeriodicReport([FromQuery] DateTime startDate, [FromQuery] DateTime? endDate=null)
     {
         var report = await _service.GetPeriodicReport(startDate, endDate);
         return Ok(report);
