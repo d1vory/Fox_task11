@@ -15,4 +15,12 @@
       <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\Components\MyDialog.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Components\MyDialog.razor" />
+    </ItemGroup>
+
 </Project>

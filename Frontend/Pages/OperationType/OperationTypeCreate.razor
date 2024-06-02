@@ -1,29 +1,29 @@
 @page "/operation_types/create"
 @using Shared2.DTO.OperationType
 @using Frontend.Services
-@inject NavigationManager navManager
-@inject HttpClient Http
+@using Frontend.Components
+@inject NavigationManager NavManager
 @inject OperationTypeService MyService
 
-<OperationTypeForm  operationType="@dto" OnValidSubmit="@Create" Loading="@loading" HeaderText="Create New OperationType"/>
-
+<OperationTypeForm operationType="@_dto" OnValidSubmit="@Create" Loading="@_loading" HeaderText="Create New OperationType"/>
 
 @code {
-    bool loading = false;
-    CreateOperationTypeDto dto = new CreateOperationTypeDto();
+    private bool _loading = false;
+    private CreateOperationTypeDto _dto = new CreateOperationTypeDto();
 
-    async Task Create()
+    private async Task Create()
     {
-        loading = true;
+        _loading = true;
         try
         {
-            var createdObj = await MyService.Create(dto);
-            navManager.NavigateTo($"/operation_types/{createdObj.Id}");
+            var createdObj = await MyService.Create(_dto);
+            NavManager.NavigateTo($"/operation_types");
         }
         catch (Exception ex)
         {
-            loading = false;
+            _loading = false;
             StateHasChanged();
         }
     }
+
 }
