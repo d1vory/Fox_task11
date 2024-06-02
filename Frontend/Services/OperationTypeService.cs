@@ -12,9 +12,9 @@ public class OperationTypeService
         _httpClient = httpClient;
     }
 
-    public async Task<OperationTypeDto[]?> List()
+    public async Task<List<OperationTypeDto>?> List()
     {
-        return await _httpClient.GetFromJsonAsync<OperationTypeDto[]>("api/operation_type");
+        return await _httpClient.GetFromJsonAsync<List<OperationTypeDto>>("api/operation_type");
     }
 
     public async Task<UpdateOperationTypeDto> Retrieve(int id)
@@ -42,8 +42,6 @@ public class OperationTypeService
         var error = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
         throw new ApplicationException(error?["message"]);
     }
-
-
     
     public async Task<OperationTypeDto> Update(UpdateOperationTypeDto dto, int id)
     {
@@ -59,4 +57,11 @@ public class OperationTypeService
         var error = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
         throw new ApplicationException(error?["message"]);
     }
+
+    public async Task<bool> Delete(OperationTypeDto dto)
+    {
+        var response = await _httpClient.DeleteAsync($"api/operation_type/{dto.Id}/");
+        return response.IsSuccessStatusCode;
+    }
+    
 }
