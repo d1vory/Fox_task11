@@ -43,5 +43,6 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.MapControllers();
 app.UseCors();
+app.MapGet("/", () => "Hello World!");
 
 app.Run();
