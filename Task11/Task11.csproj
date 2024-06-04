@@ -25,6 +25,13 @@
 
     <ItemGroup>
       <Folder Include="Data\Migrations\" />
+      <Folder Include="DTO\FinancialOperation\" />
+      <Folder Include="DTO\OperationType\" />
+      <Folder Include="DTO\Reports\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,5 @@
 
-using AutoMapper;
-
-namespace Task11.DTO.OperationType;
+namespace Shared2.DTO.OperationType;
 
 public class OperationTypeDto
 {

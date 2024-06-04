@@ -1,0 +1,34 @@
+@page "/operations/create"
+@using Frontend.Components
+@using Frontend.Services
+@using Shared2.DTO.FinancialOperation
+@inject NavigationManager NavManager
+@inject FinancialOperationService Service
+
+
+<FinancialOperationForm operation="@_dto" OnValidSubmit="@Create" Loading="@_loading" HeaderText="Create New operation"/>
+
+
+@code {
+    [CascadingParameter(Name = "ErrorComponent")]
+    protected IErrorComponent ErrorComponent { get; set; }
+    private bool _loading = false;
+    private CreateFinancialOperationDto _dto = new CreateFinancialOperationDto();
+
+    private async Task Create()
+    {
+        _loading = true;
+        try
+        {
+            _dto.CreatedAt = DateTime.Now;
+            var createdObj = await Service.Create(_dto);
+            NavManager.NavigateTo($"/operations");
+        }
+        catch (Exception ex)
+        {
+            _loading = false;
+            ErrorComponent.ShowError(ex.Message);
+        }
+    }
+    
+}

@@ -1,8 +1,8 @@
 using AutoMapper;
 using JetBrains.Annotations;
+using Shared2.DTO.OperationType;
 using Task11.Data;
 using Task11.DTO;
-using Task11.DTO.OperationType;
 using Task11.Models;
 using Task11.Services;
 

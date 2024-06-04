@@ -1,9 +1,6 @@
-using System.ComponentModel.DataAnnotations;
-using Task11.DTO.OperationType;
+namespace Shared2.DTO.FinancialOperation;
 
-namespace Task11.DTO.FinancialOperation;
-
-public class UpdateFinancialOperationDto
+public class BaseWriteFinancialOperationDto
 {
     public string Description { get; set; }
     public int OperationTypeId { get; set; }

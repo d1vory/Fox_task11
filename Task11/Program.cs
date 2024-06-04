@@ -16,6 +16,15 @@ builder.Services.AddDbContext<BaseApplicationContext, ApplicationContext>(Servic
 builder.Services.AddTransient<OperationTypeService>();
 builder.Services.AddTransient<FinancialOperationService>();
 builder.Services.AddTransient<ReportService>();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(b =>
+    {
+        b.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 
 var app = builder.Build();
@@ -31,5 +40,6 @@ app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseRouting();
 app.MapControllers();
+app.UseCors();
 
 app.Run();
