@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Task11;
 using Task11.Data;
 using Task11.DTO;
@@ -25,6 +26,7 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
+
 
 
 var app = builder.Build();

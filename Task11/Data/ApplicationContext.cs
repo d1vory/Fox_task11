@@ -1,11 +1,20 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Task11.Data;
 
 public class ApplicationContext: BaseApplicationContext
 {
+    protected readonly IConfiguration _configuration;
+
+    public ApplicationContext(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(@"data source=o-dubchak-pc2\SQLEXPRESS;initial catalog=finance;trusted_connection=true;TrustServerCertificate=True;");
+        var connectionString = _configuration.GetConnectionString("mydatabase");
+        optionsBuilder.UseSqlServer(connectionString);
     }
 }
